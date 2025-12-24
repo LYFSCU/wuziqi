@@ -4,15 +4,14 @@
 #include "Button.h"
 #include <stack>
 
-
-
 //落子位置
 struct ChessPos {
 	int row;
 	int col;
-	ChessPos(int row,int col):row(row),col(col){}
-	ChessPos() 
-	:row(0),col(0){};
+	ChessPos(int row, int col) :row(row), col(col) {}
+	ChessPos()
+		:row(0), col(0) {
+	};
 };
 
 //存储当前棋子的位置，是什么棋
@@ -20,7 +19,8 @@ struct ChessMove {
 	ChessPos pos;
 	int playerflag;
 	ChessMove(ChessPos pos, int p)
-		:pos(pos), playerflag(p) {}
+		:pos(pos), playerflag(p) {
+	}
 };
 
 //
@@ -32,21 +32,18 @@ typedef enum {
 class Chess
 {
 private:
-	IMAGE chessBlackImg;//黑棋
-	IMAGE chessBlackImg2;//刚下的黑棋
-	IMAGE chessWhiteImg;//白棋
-	IMAGE chessWhiteImg2;//刚下的白棋
+	// 移除了 IMAGE 对象
 
 	int gradeSize;//棋盘大小（13线，15，17，19）
 	int margin_x;//棋盘左侧边界
 	int margin_y;//棋盘顶部边界
 	float chessSize;//棋子大小（方格大小）
-	
+
 	std::stack<ChessMove> undoStack;
 
 public:
 	//存储当前棋子分布数据 
-    //chessMap[3][5]表示棋盘的第三行第五列的落子情况 0：空白 1：黑子 -1：白子
+	//chessMap[3][5]表示棋盘的第三行第五列的落子情况 0：空白 1：黑子 -1：白子
 	std::vector<std::vector<int>> chessMap;
 	int steps;//记录步数
 
@@ -64,9 +61,12 @@ private:
 
 	bool performUndo();
 
+	// 辅助绘图函数：绘制单个棋子
+	void drawPiece(int row, int col, int color, bool isLastMove);
+
 public:
 	Chess(int gradeSize, int marginX, int marginY, float chessSize)
-		:gradeSize(gradeSize), margin_x(marginX), margin_y(marginY), chessSize(chessSize),steps(0)
+		:gradeSize(gradeSize), margin_x(marginX), margin_y(marginY), chessSize(chessSize), steps(0)
 	{
 		playerFlag = CHESS_BLACK;
 		for (int i = 0; i < gradeSize; i++) {
@@ -79,25 +79,21 @@ public:
 	}
 	~Chess() {};
 
-
-
-	//棋盘初始化：加载棋盘图片资源，初始化棋盘的相关数据
+	//棋盘初始化：绘制棋盘，初始化数据
 	void init();
-	
-	//判断在指定坐标（x，y）位置，是否有效点击
-	//有效，则将位置保存在pos中
-	bool clickBoard(float x, float y, ChessPos* pos);
-	
-	//在棋盘pos位置落子
-	bool chessDown(ChessPos *pos, int kind);
 
-	//获取棋盘大小（13线，15线，19线）
+	//判断在指定坐标（x，y）位置，是否有效点击
+	bool clickBoard(float x, float y, ChessPos* pos);
+
+	//在棋盘pos位置落子
+	bool chessDown(ChessPos* pos, int kind);
+
+	//获取棋盘大小
 	int getGradeSize();
 
 	//获取指定位置是黑棋，白棋，还是空白
 	int getChessData(ChessPos* pos);
-	int getChessData(int row,int col);
+	int getChessData(int row, int col);
 
-	bool loadImg();
+	// 移除了 loadImg()
 };
-
